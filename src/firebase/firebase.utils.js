@@ -15,6 +15,30 @@ const config = {
 
 firebase.initializeApp(config);
 
+// Allow us to take that user auth object that we got back from our authentication library and then store inside of our database
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  // Chỉ lưu vô db khi user sign in (lúc sign out thì userAuth là null)
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+  console.log(snapShot);
+
+  if (!snapShot.exists) {
+    // Nếu chưa tồn tại trg db thì add vô
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({ displayName, email, createdAt, ...additionalData });
+    } catch (error) {
+      console.error('Error creating user', error.message);
+    }
+  }
+
+  return userRef; // Có thể cần dùng sau này
+};
+
 export const auth = firebase.auth(); // Chỗ nào cần thông tin auth sẽ import nó
 export const firestore = firebase.firestore(); // Chỗ nào cần thông tin firestore sẽ import nó
 
