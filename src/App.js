@@ -21,11 +21,26 @@ class App extends React.Component {
   componentDidMount() {
     // - Open subscription (an open messaging system) between our app & our firebase at whenever any changes occur on firebase from any source related to this app
     // We don't actually have to manually fetch every time we want to check if that status changed.
-    this.unsubcribeFromAuth = auth.onAuthStateChanged(user => {
-      // this.setState({ currentUser: user });
-      // console.log(user);
+    this.unsubcribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      // - userAuth = null khi sign out (hoặc khi chưa sign in)
+      if (userAuth) {
+        // Lưu user vô firestore sau khi login bằng Google
+        const userRef = await createUserProfileDocument(userAuth);
 
-      createUserProfileDocument(user);
+        // - Listen to this userRef for any changes to that data
+        // - We'll also get back the 1st state of that data
+        userRef.onSnapshot(snapshot => {
+          // Đảm bảo data set vô local state là data chính xác lưu trg firestore
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data()
+            }
+          });
+        });
+      } else {
+        this.setState({ currentUser: userAuth }); // userAuth đang là null
+      }
     });
   }
 
