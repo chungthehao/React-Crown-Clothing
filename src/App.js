@@ -24,7 +24,7 @@ class App extends React.Component {
     this.unsubcribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // - userAuth = null khi sign out (hoặc khi chưa sign in)
       if (userAuth) {
-        // Lưu user vô firestore sau khi login bằng Google
+        // Lưu user vô firestore (nếu chưa exists) sau khi login (bằng Google hoặc bằng email-password)
         const userRef = await createUserProfileDocument(userAuth);
 
         // - Listen to this userRef for any changes to that data

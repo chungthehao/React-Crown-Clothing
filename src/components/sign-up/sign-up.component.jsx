@@ -25,7 +25,7 @@ class SignUp extends React.Component {
     if (password !== confirmPassword) return alert("Password don't match.");
 
     try {
-      // Tạo user (& sign in sau tạo) với firebase authentication
+      // Tạo user (& tự sign in sau tạo luôn) với firebase authentication
       const { user: userAuth } = await auth.createUserWithEmailAndPassword(
         email,
         password
