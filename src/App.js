@@ -45,6 +45,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
+    // Make sure we don't get any memory leaks in our application related to listeners still being open even if the component that cares about the listener is no longer on the page.
     this.unsubcribeFromAuth();
   }
 
