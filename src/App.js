@@ -37,8 +37,6 @@ class App extends React.Component {
               ...snapshot.data()
             }
           });
-
-          console.log(this.state);
         });
       } else {
         this.setState({ currentUser: userAuth }); // userAuth đang là null
