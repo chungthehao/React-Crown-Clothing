@@ -32,7 +32,7 @@ class SignUp extends React.Component {
       );
 
       // Lưu user mới tạo ở authen firebase vô firestore (db)
-      await createUserProfileDocument(userAuth);
+      await createUserProfileDocument(userAuth, { displayName });
 
       // Clear our form
       this.setState({
