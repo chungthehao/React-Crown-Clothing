@@ -38,7 +38,7 @@ class App extends React.Component {
             }
           });
 
-          console.log('this.state', this.state);
+          //console.log('this.state', this.state);
         });
       } else {
         this.setState({ currentUser: userAuth }); // userAuth đang là null
@@ -54,7 +54,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
 
         <Switch>
           <Route exact path='/' component={HomePage} />
