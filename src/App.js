@@ -1,47 +1,41 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom'; // Switch component đảm bảo tìm được 1 Route match là ko tìm nữa
+import { connect } from 'react-redux';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-&-sign-up/sign-in-&-sign-up.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { setCurrentUser } from './redux/user/user.actions';
 import './App.css';
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      currentUser: null
-    };
-  }
-
   unsubcribeFromAuth = null;
 
   componentDidMount() {
+    // destructure props từ map từ redux vô
+    const { setCurrentUser } = this.props;
+
     // - Open subscription (an open messaging system) between our app & our firebase at whenever any changes occur on firebase from any source related to this app
     // We don't actually have to manually fetch every time we want to check if that status changed.
     this.unsubcribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // - userAuth = null khi sign out (hoặc khi chưa sign in)
       if (userAuth) {
-        // Lưu user vô firestore (nếu chưa exists) sau khi login (bằng Google hoặc bằng email-password)
+        // Lưu user vô firestore (nếu chưa exists) sau khi login (bằng Google hoặc bằng email-password). Sau dòng này chắc chắn có user trg firestore và trả về userRef của nó
         const userRef = await createUserProfileDocument(userAuth);
 
         // - Listen to this userRef for any changes to that data
         // - We'll also get back the 1st state of that data
         userRef.onSnapshot(snapshot => {
-          // Đảm bảo data set vô local state là data chính xác lưu trg firestore
-          this.setState({
-            currentUser: {
-              id: snapshot.id,
-              ...snapshot.data()
-            }
+          // Đảm bảo data set vô store là data chính xác lưu trg firestore
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data()
           });
-
-          //console.log('this.state', this.state);
         });
       } else {
-        this.setState({ currentUser: userAuth }); // userAuth đang là null
+        setCurrentUser(userAuth); // userAuth đang là null
       }
     });
   }
@@ -66,4 +60,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user)) //
+  // tên key 'setCurrentUser' là cái prop sẽ pass vô component
+  // Phần value: what 'dispatch' is it is a way for redux to know whatever you're passing me, whatever object you're passing me is going to be an action object that I'm gonna pass to every reducer
+});
+
+export default connect(null, mapDispatchToProps)(App);
