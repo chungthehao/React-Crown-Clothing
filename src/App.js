@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom'; // Switch component đảm bảo tìm được 1 Route match là ko tìm nữa
+import { Route, Switch, Redirect } from 'react-router-dom'; // Switch component đảm bảo tìm được 1 Route match là ko tìm nữa
 import { connect } from 'react-redux';
 
 import HomePage from './pages/homepage/homepage.component';
@@ -53,12 +53,26 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route exact path='/shop' component={ShopPage} />
-          <Route exact path='/sign-in' component={SignInAndSignUpPage} />
+          <Route
+            exact
+            path='/sign-in'
+            render={() =>
+              this.props.currentUser ? (
+                <Redirect to='/' />
+              ) : (
+                <SignInAndSignUpPage />
+              )
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
+
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)) //
@@ -66,4 +80,4 @@ const mapDispatchToProps = dispatch => ({
   // Phần value: what 'dispatch' is it is a way for redux to know whatever you're passing me, whatever object you're passing me is going to be an action object that I'm gonna pass to every reducer
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
