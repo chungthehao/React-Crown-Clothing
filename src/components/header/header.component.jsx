@@ -5,6 +5,7 @@ import { connect } from 'react-redux'; // HOC, mofify our component to have acce
 import { auth } from '../../firebase/firebase.utils';
 import './header.styles.scss';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
+import CartIcon from '../cart-icon/cart-icon.component';
 
 const Header = ({ currentUser }) => (
   <div className='header'>
@@ -28,6 +29,7 @@ const Header = ({ currentUser }) => (
           SIGN IN
         </Link>
       )}
+      <CartIcon />
     </div>
   </div>
 );
