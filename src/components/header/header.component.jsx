@@ -8,7 +8,7 @@ import { ReactComponent as Logo } from '../../assets/crown.svg';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
-const Header = ({ currentUser }) => (
+const Header = ({ currentUser, hidden }) => (
   <div className='header'>
     <Link className='logo-container' to='/'>
       <Logo className='logo' />
@@ -33,16 +33,17 @@ const Header = ({ currentUser }) => (
       <CartIcon />
     </div>
 
-    <CartDropdown />
+    {hidden ? null : <CartDropdown />}
   </div>
 );
 
 // Tên hàm 'mapStateToProps' có thể là bất cứ gì (tên này hợp lý r)
 // Đầu vào là state object (root reducer)
 const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+  currentUser: state.user.currentUser,
   // tên key 'currentUser' là cái prop sẽ pass vô component
   // value: là cái sẽ truy xuất vô store redux, xuất phát từ root reducer
+  hidden: state.cart.hidden
 });
 
 export default connect(mapStateToProps)(Header);
