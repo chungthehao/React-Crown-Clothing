@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import { ReactComponent as ShoppingIcon } from '../../assets/shopping-bag.svg';
 import { toggleCartHidden } from '../../redux/cart/cart.actions';
@@ -16,24 +17,18 @@ const CartIcon = props => {
   );
 };
 
-const mapStateToProps = state => {
-  // sign-in, sign-out, toggle cart dropdown cũng gọi nữa?! --> Vì switch case return a brand new state obj
-  // Mặc cho CartIcon này chỉ qtâm cartItems thôi
-  // This is not good for performance -> we don't wanna re-render our component every time the state changes especially if those state changes don't actually modify the parts of the state that our component cares about
-  // console.log('I am being called');
-  return {
-    // # Khi KHÔNG DÙNG reselect
-    // itemCount: (() => {
-    //   wait(100); // expensive calc
-    //   return state.cart.cartItems.reduce((accumulatedQuantity, cartItem) => {
-    //     return accumulatedQuantity + cartItem.quantity;
-    //   }, 0);
-    // })()
+const mapStateToProps = createStructuredSelector({
+  // # Khi KHÔNG DÙNG reselect
+  // itemCount: (() => {
+  //   wait(100); // expensive calc
+  //   return state.cart.cartItems.reduce((accumulatedQuantity, cartItem) => {
+  //     return accumulatedQuantity + cartItem.quantity;
+  //   }, 0);
+  // })()
 
-    // # Khi CÓ DÙNG reselect
-    itemCount: selectCartItemsCount(state)
-  };
-};
+  // # Khi CÓ DÙNG reselect
+  itemCount: selectCartItemsCount
+});
 
 const mapDispatchToProps = dispatch => ({
   toggleCartHidden: () => dispatch(toggleCartHidden())
