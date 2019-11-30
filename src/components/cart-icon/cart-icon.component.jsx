@@ -36,6 +36,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartIcon);
 
+// eslint-disable-next-line
 const wait = ms => {
   const start = Date.now();
   let now = start;
