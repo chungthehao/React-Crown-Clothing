@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'; // HOC, mofify our component to have access to things related to redux
 import { createStructuredSelector } from 'reselect';
 
@@ -10,7 +9,7 @@ import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
-import {HeaderContainer, LogoContainer, OptionDiv, OptionLink, OptionsContainer} from "./header.styles";
+import {HeaderContainer, LogoContainer, OptionLink, OptionsContainer} from "./header.styles";
 
 const Header = ({ currentUser, hidden }) => (
   <HeaderContainer>
@@ -29,9 +28,9 @@ const Header = ({ currentUser, hidden }) => (
         CONTACT
       </OptionLink>
       {currentUser ? (
-        <OptionDiv onClick={() => auth.signOut()}>
+        <OptionLink as='div' onClick={() => auth.signOut()}>
           SIGN OUT
-        </OptionDiv>
+        </OptionLink>
       ) : (
         <OptionLink to='/sign-in'>
           SIGN IN
