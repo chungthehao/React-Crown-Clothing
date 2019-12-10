@@ -20,9 +20,11 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   // Chỉ lưu vô db khi user sign in (lúc sign out thì userAuth là null)
   if (!userAuth) return;
 
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  // const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userRef = firestore.doc(`users/12345678abcdef`);
+  console.log(userRef);
   const snapShot = await userRef.get();
-  //console.log(snapShot);
+  console.log(snapShot.data());
 
   if (!snapShot.exists) {
     // Nếu chưa tồn tại trg db thì add vô
@@ -30,7 +32,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     const createdAt = new Date();
 
     try {
-      await userRef.set({ displayName, email, createdAt, ...additionalData });
+      await userRef.set({ displayName: 'Test User', email: 'test@email.io', createdAt, ...additionalData });
     } catch (error) {
       console.error('Error creating user', error.message);
     }
