@@ -21,7 +21,7 @@ class App extends React.Component {
     // destructure props từ map từ redux vô
     const { setCurrentUser, collectionsArray } = this.props;
 
-    addCollectionAndDocuments('collections', collectionsArray);
+    addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({title, items})));
 
     // - Open subscription (an open messaging system) between our app & our firebase at whenever any changes occur on firebase from any source related to this app
     // We don't actually have to manually fetch every time we want to check if that status changed.
