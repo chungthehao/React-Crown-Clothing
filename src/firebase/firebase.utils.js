@@ -60,7 +60,7 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
 };
 
 export const convertCollectionsSnapshotToMap = collections => {
-    const transformedCollection = collections.docs.map(doc => {
+    const transformedCollections = collections.docs.map(doc => {
         const { title, items } = doc.data();
 
         return {
@@ -71,7 +71,10 @@ export const convertCollectionsSnapshotToMap = collections => {
         }
     });
 
-    console.log(transformedCollection)
+    return transformedCollections.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {});
 };
 
 export const auth = firebase.auth(); // Chỗ nào cần thông tin auth sẽ import nó
