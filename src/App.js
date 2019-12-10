@@ -8,10 +8,9 @@ import ShopPage from './pages/shop/shop.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-&-sign-up/sign-in-&-sign-up.component';
-import { auth, createUserProfileDocument, addCollectionAndDocuments } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
-import {selectCollectionsForPreview} from "./redux/shop/shop.selector";
 import './App.css';
 
 class App extends React.Component {
@@ -19,9 +18,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // destructure props từ map từ redux vô
-    const { setCurrentUser, collectionsArray } = this.props;
-
-    addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({title, items})));
+    const { setCurrentUser } = this.props;
 
     // - Open subscription (an open messaging system) between our app & our firebase at whenever any changes occur on firebase from any source related to this app
     // We don't actually have to manually fetch every time we want to check if that status changed.
@@ -79,7 +76,6 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-  collectionsArray: selectCollectionsForPreview
 });
 
 const mapDispatchToProps = dispatch => ({
