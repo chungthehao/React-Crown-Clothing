@@ -28,18 +28,23 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   // console.log(collectionSnapshot.docs.map(doc => doc.data()));
 
   if (!snapShot.exists) {
-    // Nếu chưa tồn tại trg db thì add vô
-    const { displayName, email } = userAuth;
-    const createdAt = new Date();
+	// Nếu chưa tồn tại trg db thì add vô
+	const { displayName, email } = userAuth;
+	const createdAt = new Date();
 
-    try {
-      await userRef.set({ displayName, email, createdAt, ...additionalData });
-    } catch (error) {
-      console.error('Error creating user', error.message);
-    }
+	try {
+	  await userRef.set({ displayName, email, createdAt, ...additionalData });
+	} catch (error) {
+	  console.error('Error creating user', error.message);
+	}
   }
 
   return userRef; // Có thể cần dùng sau này
+};
+
+export const addCollectionAndDocuments = (collectionKey, objectsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey);
+  console.log(collectionRef)
 };
 
 export const auth = firebase.auth(); // Chỗ nào cần thông tin auth sẽ import nó
