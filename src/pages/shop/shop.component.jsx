@@ -1,29 +1,21 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
 
-import {convertCollectionsSnapshotToMap, firestore} from "../../firebase/firebase.utils";
-import {updateCollections} from "../../redux/shop/shop.actions";
+import {fetchCollectionsStartAsync} from "../../redux/shop/shop.actions";
+import {selectIsCollectionFetching} from "../../redux/shop/shop.selector";
 import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
 import CollectionPage from '../collection/collection.component';
 import WithSpinner from "../../components/with-spinner/with-spinner.component";
 
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview); // Chinh la Spinner; // trả về 1 component
 const CollectionPageWithSpinner = WithSpinner(CollectionPage); // Chinh la Spinner; // trả về 1 component
-
+ 
 class ShopPage extends React.Component {
-  // Short hand to have state
-  // React tự chạy constructor & super này nọ (các phiên bản React sau này mới có)
-  state = {
-    loading: true
-  };
-
-  unsubscribeFromSnapshot = null;
-
   componentDidMount() {
-    const { updateCollections } = this.props;
-
-    const collectionRef = firestore.collection('collections');
+    const { fetchCollectionsStartAsync } = this.props;
+    fetchCollectionsStartAsync();
 
     // # Nested too much!
     // fetch('https://firestore.googleapis.com/v1/projects/crwn-db-7c56e/databases/(default)/documents/collections')
@@ -31,14 +23,14 @@ class ShopPage extends React.Component {
     //   .then(myData => console.log(myData.documents))
 
     // # Chỉ chạy 1 lần rồi thôi!
-    collectionRef.get().then(snapshot => {
-      const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-
-      // Cập nhật vô redux -> shop -> collections
-      updateCollections(collectionsMap);
-
-      this.setState({ loading: false });
-    });
+    // collectionRef.get().then(snapshot => {
+    //   const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+    //
+    //   // Cập nhật vô redux -> shop -> collections
+    //   updateCollections(collectionsMap);
+    //
+    //   this.setState({ loading: false });
+    // });
 
     // # Subscribe
     // onSnapshot: whenever the 'collectionRef' updates or whenever this code gets run for the 1st time
@@ -57,8 +49,7 @@ class ShopPage extends React.Component {
   }
 
   render() {
-    const { match } = this.props;
-    const { loading } = this.state;
+    const { match, isCollectionFetching } = this.props;
 
     return (
       <div className='shop-page'>
@@ -67,9 +58,9 @@ class ShopPage extends React.Component {
 
 
         <Route exact path={`${match.path}`}
-               render={props => <CollectionsOverviewWithSpinner isLoading={loading} {...props} />} />
+               render={props => <CollectionsOverviewWithSpinner isLoading={isCollectionFetching} {...props} />} />
         <Route path={`${match.path}/:collectionId`}
-               render={props => <CollectionPageWithSpinner isLoading={loading} {...props} />} />
+               render={props => <CollectionPageWithSpinner isLoading={isCollectionFetching} {...props} />} />
 
       </div>
     );
@@ -88,8 +79,12 @@ class ShopPage extends React.Component {
 //   );
 // };
 
-const mapDispatchToProps = dispatch => ({
-  updateCollections: collectionsMap => dispatch(updateCollections(collectionsMap)),
+const mapStateToProps = createStructuredSelector({
+  isCollectionFetching: selectIsCollectionFetching
 });
 
-export default connect(null, mapDispatchToProps)(ShopPage);
+const mapDispatchToProps = dispatch => ({
+  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);
