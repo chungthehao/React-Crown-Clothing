@@ -25,9 +25,25 @@ class ShopPage extends React.Component {
 
     const collectionRef = firestore.collection('collections');
 
+    // # Nested too much!
+    // fetch('https://firestore.googleapis.com/v1/projects/crwn-db-7c56e/databases/(default)/documents/collections')
+    //   .then(res => res.json())
+    //   .then(myData => console.log(myData.documents))
+
+    // # Chỉ chạy 1 lần rồi thôi!
+    collectionRef.get().then(snapshot => {
+      const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+
+      // Cập nhật vô redux -> shop -> collections
+      updateCollections(collectionsMap);
+
+      this.setState({ loading: false });
+    });
+
+    // # Subscribe
     // onSnapshot: whenever the 'collectionRef' updates or whenever this code gets run for the 1st time
     // this 'collectionRef' will send us the snapshot representing the code of our collections objects array at the time when this code renders.
-    collectionRef.onSnapshot(async snapshot => {
+    /*collectionRef.onSnapshot(async snapshot => {
       // console.log(snapshot); // Là nguyên 1 collection snapshot có tên là 'collections' từ Firebase
 
       const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
@@ -37,7 +53,7 @@ class ShopPage extends React.Component {
       updateCollections(collectionsMap);
 
       this.setState({ loading: false });
-    });
+    });*/
   }
 
   render() {
