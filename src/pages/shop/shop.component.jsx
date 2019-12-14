@@ -2,15 +2,15 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import {connect} from "react-redux";
 
-import {fetchCollectionsStartAsync} from "../../redux/shop/shop.actions";
-import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
-import CollectionPageContainer from '../collection/collection.container';
+import {fetchCollectionsStart} from "../../redux/shop/shop.actions";
+import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container.jsx';
+import CollectionPageContainer from '../collection/collection.container.jsx';
 
 
 class ShopPage extends React.Component {
   componentDidMount() {
-    const { fetchCollectionsStartAsync } = this.props;
-    fetchCollectionsStartAsync();
+    const { fetchCollectionsStart } = this.props;
+    fetchCollectionsStart();
 
     // # Nested too much!
     // fetch('https://firestore.googleapis.com/v1/projects/crwn-db-7c56e/databases/(default)/documents/collections')
@@ -71,7 +71,7 @@ class ShopPage extends React.Component {
 
 
 const mapDispatchToProps = dispatch => ({
-  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+  fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 });
 
 export default connect(null, mapDispatchToProps)(ShopPage);
