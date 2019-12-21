@@ -26,18 +26,8 @@ class SignIn extends React.Component {
     const { email, password } = this.state;
     const { emailSignInStart } = this.props;
 
+    // Trigger saga
     emailSignInStart(email, password);
-
-    // try {
-    //   await auth.signInWithEmailAndPassword(email, password);
-    //   // Clear form
-    //   this.setState({ email: '', password: '' });
-    // } catch (error) {
-    //   console.error(error);
-    //   if (error.code === 'auth/wrong-password') {
-    //     alert(error.message);
-    //   }
-    // }
   };
 
   render() {
