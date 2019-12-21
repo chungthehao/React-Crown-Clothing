@@ -22,7 +22,7 @@ class App extends React.Component {
 
     // - Open subscription (an open messaging system) between our app & our firebase at whenever any changes occur on firebase from any source related to this app
     // We don't actually have to manually fetch every time we want to check if that status changed.
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    /*this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // - userAuth = null khi sign out (hoặc khi chưa sign in)
       if (userAuth) {
         // Lưu user vô firestore (nếu chưa exists) sau khi login (bằng Google hoặc bằng email-password). Sau dòng này chắc chắn có user trg firestore và trả về userRef của nó
@@ -40,12 +40,12 @@ class App extends React.Component {
       } else {
         setCurrentUser(userAuth); // userAuth đang là null
       }
-    });
-  }
+    });*/
+  } // END: COMPONENT DID MOUNT
 
   componentWillUnmount() {
     // Make sure we don't get any memory leaks in our application related to listeners still being open even if the component that cares about the listener is no longer on the page.
-    this.unsubscribeFromAuth();
+    // this.unsubscribeFromAuth();
   }
 
   render() {

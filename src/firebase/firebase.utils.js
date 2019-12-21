@@ -81,13 +81,13 @@ export const auth = firebase.auth(); // Chỗ nào cần thông tin auth sẽ im
 export const firestore = firebase.firestore(); // Chỗ nào cần thông tin firestore sẽ import nó
 
 // * Setup our Google authentication utility
-const provider = new firebase.auth.GoogleAuthProvider();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 // Always trigger the Google popup when ever we use this Google provider for authentication and sign in
-provider.setCustomParameters({ prompt: 'select_account' });
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // Có thể có Twitter,... nhưng ở đây mình muốn Google, nên đưa provider Google vô
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
 // * End: Setup our Google authentication utility
 
 export default firebase; // export trước, in case we want the whole library
