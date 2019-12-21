@@ -10,8 +10,16 @@ import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-&-sign-up/sign-in-&-sign-up.component';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import './App.css';
+import {checkUserSession} from "./redux/user/user.actions";
 
 class App extends React.Component {
+  componentDidMount() {
+    const { checkUserSession } = this.props;
+
+    // App mình mới chạy thì check liền coi thử coi user session có đâu đó chưa?
+    checkUserSession();
+  }
+
   render() {
     return (
       <div>
@@ -42,4 +50,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

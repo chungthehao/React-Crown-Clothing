@@ -77,6 +77,16 @@ export const convertCollectionsSnapshotToMap = collections => {
     }, {});
 };
 
+// Mình đang 'mimicking' chức năng mà có thể gặp phải khi dùng backend ko phải là Firebase
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      unsubscribe();
+      resolve(userAuth);
+    }, reject);
+  });
+};
+
 export const auth = firebase.auth(); // Chỗ nào cần thông tin auth sẽ import nó
 export const firestore = firebase.firestore(); // Chỗ nào cần thông tin firestore sẽ import nó
 

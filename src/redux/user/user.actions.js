@@ -22,3 +22,8 @@ export const SignInFailure = err => ({
   type: UserActionTypes.SIGN_IN_FAILURE,
   payload: err
 });
+
+// Khi app vừa chạy, kiểm tra liền coi xem là user session có persist?
+export const checkUserSession = () => ({
+  type: UserActionTypes.CHECK_USER_SESSION
+});
