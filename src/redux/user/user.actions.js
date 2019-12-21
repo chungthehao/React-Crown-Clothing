@@ -12,13 +12,13 @@ export const emailSignInStart = emailAndPassword => ({
 });
 
 // After sign in & have the user back
-export const SignInSuccess = user => ({
+export const signInSuccess = user => ({
   type: UserActionTypes.SIGN_IN_SUCCESS,
   payload: user
 });
 
 // After the sign in process fails, anything goes wrong
-export const SignInFailure = err => ({
+export const signInFailure = err => ({
   type: UserActionTypes.SIGN_IN_FAILURE,
   payload: err
 });
@@ -26,4 +26,17 @@ export const SignInFailure = err => ({
 // Khi app vừa chạy, kiểm tra liền coi xem là user session có persist?
 export const checkUserSession = () => ({
   type: UserActionTypes.CHECK_USER_SESSION
+});
+
+export const signOutStart = () => ({
+  type: UserActionTypes.SIGN_OUT_START
+});
+
+export const signOutFailure = (err) => ({
+  type: UserActionTypes.SIGN_OUT_FAILURE,
+  payload: err
+});
+
+export const signOutSuccess = () => ({
+  type: UserActionTypes.SIGN_OUT_SUCCESS
 });
