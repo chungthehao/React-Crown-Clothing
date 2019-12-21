@@ -5,7 +5,7 @@ import { persistStore } from 'redux-persist'; // Allow our browser to actually c
 import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from './root-reducer';
-import {fetchCollectionsStart} from "./shop/shop.sagas";
+import rootSaga from "./root-saga";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -24,7 +24,7 @@ export const store = createStore(
 
 // Sau khi applyMiddleware (sagaMiddle đã đc apply) đc gọi.
 // Mình add on & run the individual sagas mình sẽ viết
-sagaMiddleware.run(fetchCollectionsStart);
+sagaMiddleware.run(rootSaga);
 
 // This 'persistor' is essentially a persisted version of our store
 export const persistor = persistStore(store);
