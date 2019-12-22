@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux'; // HOC, mofify our component to have access to things related to redux
 import { createStructuredSelector } from 'reselect';
 
-import { auth } from '../../firebase/firebase.utils';
 // import './header.styles.scss';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 import CartIcon from '../cart-icon/cart-icon.component';

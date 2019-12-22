@@ -1,15 +1,22 @@
 import {takeLatest, put, all, call} from 'redux-saga/effects';
 
 import UserActionTypes from './user.types';
-import {signInFailure, signInSuccess, signOutFailure, signOutSuccess} from "./user.actions";
+import {
+  signInFailure,
+  signInSuccess,
+  signOutFailure,
+  signOutSuccess,
+  signUpFailure,
+  signUpSuccess
+} from "./user.actions";
 import {auth, createUserProfileDocument, getCurrentUser, googleProvider} from "../../firebase/firebase.utils";
 
-export function* getSnapshotFromUserAuth(userAuth) {
+export function* getSnapshotFromUserAuth(userAuth, additionalData) {
   try {
-    const userRef = yield call(createUserProfileDocument, userAuth);
+    const userRef = yield call(createUserProfileDocument, userAuth, additionalData);
     const userSnapshot = yield userRef.get();
 
-    yield  put(signInSuccess({
+    yield put(signInSuccess({
       id: userSnapshot.id,
       ...userSnapshot.data()
     }));
@@ -75,6 +82,32 @@ export function* onSignOutStart() {
   yield takeLatest(UserActionTypes.SIGN_OUT_START, signOutUser);
 }
 
+export function* signUp({ payload: { email, password, displayName } }) {
+  try {
+    // Tạo user (& tự sign in sau tạo luôn, Firebase làm) với firebase authentication
+    const { user: userAuth } = yield auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+
+    yield put(signUpSuccess({ userAuth, additionalData: { displayName } }));
+  } catch (err) {
+    yield put(signUpFailure(err));
+  }
+}
+
+export function* signInAfterSignUp({ payload: { userAuth, additionalData } }) {
+  yield getSnapshotFromUserAuth(userAuth, additionalData);
+}
+
+export function* onSignUpSuccess() {
+  yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp);
+}
+
+export function* onSignUpStart() {
+  yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
+}
+
 export function* userSagas() {
   // Chạy đồng thời all các saga này
   yield all([
@@ -82,5 +115,7 @@ export function* userSagas() {
     call(onEmailSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
+    call(onSignUpStart),
+    call(onSignUpSuccess),
   ]);
 }
