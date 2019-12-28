@@ -1,15 +1,35 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
+import axios from 'axios';
 
 const StripeCheckoutButton = ({ price }) => {
+  // console.log(price);
   const priceForStripe = price * 100;
   const publishableKey = 'pk_test_fuKaI0NYdIqtLmYGpdztlMV100kjavkrCi';
 
-  // Trigger khi ng dùng nhấn pay
-  // Rồi sẽ pass token tới backend để xử lý charge tiền
+  // - Trigger khi ng dùng nhấn xác nhận thanh toán (sau khi đã nhập đầy đủ thông tin)
+  // - Rồi sẽ pass token tới backend để xử lý charge tiền
   const onToken = token => {
-    console.log(token);
-    alert('Payment successful!');
+    // console.log(token);
+    // alert('Payment successful!');
+
+    axios({
+      url: 'payment',
+      method: 'post',
+      data: {
+        amount: priceForStripe,
+        token
+      }
+    })
+      .then(res => {
+        alert('Payment successful');
+      })
+      .catch(err => {
+        console.log('Payment error: ', err);
+        alert(
+          'There was an issue with your payment. Please sure you use the provided credit card.'
+        );
+      });
   };
 
   return (

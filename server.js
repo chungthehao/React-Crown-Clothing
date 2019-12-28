@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Phải bên dưới dòng env
+// console.log(process.env.STRIPE_SECRET_KEY);
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
@@ -28,7 +29,16 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
+} else {
+  // app.get('*', (req, res) => {
+  //   res.status(200).send('<h1>Running!!!</h1>');
+  // });
 }
+
+app.listen(port, err => {
+  if (err) throw err;
+  console.log('Server is running on port ' + port);
+});
 
 // Xử lý request thanh toán từ client (phía frontend react app)
 app.post('/payment', (req, res) => {
@@ -46,9 +56,4 @@ app.post('/payment', (req, res) => {
       res.status(200).send({ success: stripeRes });
     }
   });
-});
-
-app.listen(port, err => {
-  if (err) throw err;
-  console.log('Server is running on port ' + port);
 });

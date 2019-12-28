@@ -2,8 +2,8 @@
   "name": "react-crown-clothing",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
   "dependencies": {
+    "axios": "^0.19.0",
     "firebase": "^7.4.0",
     "node-sass": "^4.13.0",
     "react": "^16.11.0",
@@ -40,5 +40,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {},
+  "proxy": "http://localhost:5000"
 }
