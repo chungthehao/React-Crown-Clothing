@@ -5,7 +5,7 @@ import {HomePageContainer} from "./homepage.styles";
 // import './homepage.styles.scss';
 
 const HomePage = () => {
-  throw Error;
+  // throw Error; // test ErrorBoundary
 
   return (
     <HomePageContainer>

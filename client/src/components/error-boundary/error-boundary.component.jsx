@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { ErrorImageOverlay, ErrorImageContainer, ErrorImageText } from './error-boundary.styles';
+
 
 class ErrorBoundary extends React.Component {
 
@@ -26,7 +28,12 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasErrored ) {
-      return <div>Something went wrong...</div>
+      return (
+        <ErrorImageOverlay>
+          <ErrorImageContainer imageUrl='https://i.imgur.com/qIufhof.png' />
+          <ErrorImageText>Sorry this page is broken...</ErrorImageText>
+        </ErrorImageOverlay>
+      );
     }
 
     // Nếu ko có error, show cái children (đc gói trong ErrorBoundary) bình thường
