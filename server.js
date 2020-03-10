@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser'); // Middleware này nhận request và parse dùm mình trước
 const path = require('path'); // native module
+const compression = require('compression');
 
 // Đưa các thông tin từ file .env vào process.env.XXX
 if (process.env.NODE_ENV !== 'production') {
@@ -15,6 +16,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const port = process.env.PORT || 5000; // when u deploy to Heroku, it sets up the process PORT for you
 
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
